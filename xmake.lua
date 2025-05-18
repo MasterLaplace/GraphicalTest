@@ -1,4 +1,4 @@
-add_requires("glfw >=3.4")
+add_requires("glfw >=3.4", "glew")
 
 set_project("GraphicalTest")
 set_languages("c++20")
@@ -14,10 +14,10 @@ target("app")
     set_kind("binary")
     set_default(true)
 
-    add_files("src/main.cpp", "src/window.cpp")
+    add_files("src/*.cpp")
     add_includedirs("src")
 
-    add_packages("glfw")
+    add_packages("glfw", "glew")
 
     set_rundir("$(projectdir)")
 
@@ -26,10 +26,10 @@ target("test")
     set_kind("binary")
     set_default(true)
 
-    add_files("tests/test.cpp", "tests/mock_glfw.cpp", "src/window.cpp")
+    add_files("tests/*.cpp", "src/window.cpp")
     add_includedirs("src")
 
-    add_packages("glfw")
+    add_packages("glfw", "glew")
 
     set_rundir("$(projectdir)")
 
