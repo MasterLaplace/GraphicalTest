@@ -3,35 +3,47 @@
 #include <iostream>
 #include "window.hpp"
 
-extern int fake_glewInit_result;
-
 int main()
 {
-    if (!glfwInit()) {
-        std::cerr << "GLFW init failed\n";
-        return 1;
-    }
+    if (!initGraphics())
+        return std::cerr << "Failed to init GLFW\n", 1;
+
+    setWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    setWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    setWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow *window = createWindow();
-    if (!window) {
-        std::cerr << "Window creation failed\n";
-        glfwTerminate();
+    if (!window)
+    {
+        std::cerr << "Failed to create window\n";
+        terminateGraphics();
         return 2;
     }
 
-    std::cout << "Test: window pointer = " << window << "\n";
+    std::cout << "Window created: " << window << "\n";
 
+    makeContextCurrent(window);
+    setSwapInterval(1);
 
-    glfwMakeContextCurrent(window);
-
-    GLenum err = glewInit();
-    if (err != GLEW_OK) {
-        std::cerr << "Mocked GLEW error: " << glewGetErrorString(err) << "\n";
-    } else {
-        std::cout << "GLEW initialized: " << glGetString(GL_VERSION) << "\n";
+    int err = initOpenGL();
+    if (err != GLEW_OK)
+    {
+        std::cerr << "GLEW error: " << getGLEWErrorString(err) << "\n";
+        destroyWindow(window);
+        terminateGraphics();
+        return 3;
     }
 
-    glfwDestroyWindow(window);
-    glfwTerminate();
+    std::cout << "OpenGL version: " << getOpenGLVersion() << "\n";
+
+    while (!windowShouldClose(window))
+    {
+        pollEvents();
+        clearScreen(GL_COLOR_BUFFER_BIT);
+        swapBuffers(window);
+    }
+
+    destroyWindow(window);
+    terminateGraphics();
     return 0;
 }
