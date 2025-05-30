@@ -17,6 +17,7 @@ target("mock")
     set_kind("static")
     add_files("mock_glfw.c")
     add_headerfiles("mock_glfw.h")
+    add_packages("glfw")
     -- Note: pas besoin de lier GLFW ici car on remplace les fonctions
     set_targetdir("build")
 target_end()
@@ -50,6 +51,7 @@ target("test")
     -- Ajouter spécifiquement les objets de mock
     add_linkdirs("build")
     add_links("mock")
+    add_packages("glfw")
 
     -- Utiliser une version spéciale de window qui n'inclut pas GLFW
     add_files("window.cpp")

@@ -1,6 +1,8 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include <GLFW/glfw3.h>
+
 // Déclaration anticipée pour éviter d'inclure GLFW/glfw3.h dans le header
 struct GLFWwindow;
 
